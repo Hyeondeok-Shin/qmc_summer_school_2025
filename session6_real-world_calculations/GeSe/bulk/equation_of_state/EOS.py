@@ -41,7 +41,7 @@ dft_shared = obj(
     nspin            = 2,
     start_mag        = obj(Ge=0.2),
     kshift           = (0,0,0),
-    pseudos          = ['Ge.BFD.upf','Se.BFD.upf'],
+    pseudos          = ['Ge.ccECP.upf','Se.ccECP.upf'],
     )
 
 qmc_shared = obj(
@@ -49,7 +49,7 @@ qmc_shared = obj(
     input_type     = 'basic',
     meshfactor     = 1.00,
     spin_polarized = True,
-    pseudos        = ['Ge.BFD.xml','Se.BFD.xml'],
+    pseudos        = ['Ge.ccECP.xml','Se.ccECP.xml'],
     )
 
 for scale in scales:
@@ -86,7 +86,7 @@ for scale in scales:
     job               = job(cores=cores, app='pw.x'),
     calculation       = 'scf',
     system            = system,
-    kgrid             = (12,12,8),
+    kgrid             = (2,2,1),
     **dft_shared
     )
 
@@ -125,7 +125,8 @@ for scale in scales:
     init_cycles          = 5,
     cycles               = 5,
     blocks               = 10,
-    substeps                = 50,
+    samples              = 12800,
+    substeps                = 20,
     minwalkers           = 0.3,
     corrections          = [],
     dependencies         = (p2q,'orbitals'),
@@ -149,7 +150,8 @@ for scale in scales:
     init_cycles          = 0,
     cycles               = 10,
     blocks               = 10,
-    substeps                = 50,
+    samples              = 12800,
+    substeps                = 20,
     minwalkers           = 0.5,
     corrections          = [],
     dependencies         = [(p2q,'orbitals'), (optJ12,'jastrow')],
@@ -174,7 +176,7 @@ for scale in scales:
         total_walkers = 1024,
         timestep         = 0.01,
         warmupsteps      = 100,
-        blocks           = 200,
+        blocks           = 100,
         substeps            = 20,
         nonlocalmoves    = 'v3',
         ),

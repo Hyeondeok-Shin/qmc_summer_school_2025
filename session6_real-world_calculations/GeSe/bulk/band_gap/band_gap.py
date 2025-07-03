@@ -184,7 +184,8 @@ qmc_excitonic_gap = generate_qmcpack(
     path                 = basepath + 'qmc_excitonic_gap',
     job                  = job(cores=cores,app='qmcpack'),
     system               = system,
-    excitation = ['up', '-20 + 21'],
+    excitation           = ['up', '0 19 0 20'],
+#    excitation = ['up', '-20 + 21'],
     calculations         = [
     vmc(
         total_walkers = 1024,

@@ -73,7 +73,7 @@ system = generate_physical_system(
     Se      = 6,                         # pseudo-Se (6 val. elec.)
  )
 
-basepath = '{}/'.format(scale)
+basepath = './'
 
 scf = generate_pwscf(
     identifier        = 'scf',
@@ -184,7 +184,7 @@ qmc_excitonic_gap = generate_qmcpack(
     path                 = basepath + 'qmc_excitonic_gap',
     job                  = job(cores=cores,app='qmcpack'),
     system               = system,
-    excitation = ['up', '-20 + 21']
+    excitation = ['up', '-20 + 21'],
     calculations         = [
     vmc(
         total_walkers = 1024,

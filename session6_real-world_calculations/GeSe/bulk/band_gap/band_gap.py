@@ -184,6 +184,7 @@ qmc_excitonic_gap = generate_qmcpack(
     path                 = basepath + 'qmc_excitonic_gap',
     job                  = job(cores=cores,app='qmcpack'),
     system               = system,
+    det_format = "old",
     excitation           = ['up', '0 19 0 20'],
 #    excitation = ['up', '-20 + 21'],
     calculations         = [
@@ -234,9 +235,9 @@ qmc_QP_minus = generate_qmcpack(
     **qmc_shared
     )
 
-u = qmc_minus.input.get('u')
+u = qmc_QP_minus.input.get('u')
 u.size-=1
-updet = qmc_minus.input.get('updet')
+updet = qmc_QP_minus.input.get('updet')
 updet.size-=1
 
 qmc_QP_plus = generate_qmcpack(
@@ -267,9 +268,9 @@ qmc_QP_plus = generate_qmcpack(
     )
 
 
-u = qmc_plus.input.get('u')
+u = qmc_QP_plus.input.get('u')
 u.size+=1
-updet = qmc_plus.input.get('updet')
+updet = qmc_QP_plus.input.get('updet')
 updet.size+=1
  
 run_project()

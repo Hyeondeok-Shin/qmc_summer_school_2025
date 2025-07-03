@@ -30,7 +30,7 @@ settings(
 dft_shared = obj(
     input_type       = 'generic',
     input_dft        = 'pbe',
-    ecutwfc          = 100,  # LAB-ONLY
+    ecutwfc          = 300,  # LAB-ONLY
     occupations      = 'smearing',
     smearing         = 'fermi-dirac',
     degauss          = 1e-3,
@@ -38,7 +38,7 @@ dft_shared = obj(
     nspin            = 2,
     start_mag        = obj(Ge=0.2),
     kshift           = (0,0,0),
-    pseudos          = ['Ge.BFD.upf','Se.BFD.upf'],
+    pseudos          = ['Ge.ccECP.upf','Se.ccECP.upf'],
     )
 
 qmc_shared = obj(
@@ -46,7 +46,7 @@ qmc_shared = obj(
     input_type     = 'basic',
     meshfactor     = 1.00,
     spin_polarized = True,
-    pseudos        = ['Ge.BFD.xml','Se.BFD.xml'],
+    pseudos        = ['Ge.ccECP.xml','Se.ccECP.xml'],
     )
 
 system = generate_physical_system(
@@ -81,7 +81,7 @@ scf = generate_pwscf(
     job               = job(cores=cores, app='pw.x'),
     calculation       = 'scf',
     system            = system,
-    kgrid             = (12,12,8),
+    kgrid             = (2,2,1),
     **dft_shared
     )
 
@@ -105,8 +105,6 @@ p2q = generate_pw2qmcpack(
     dependencies      = (nscf,'orbitals'),
     )
 
-J3_rcut = system.structure.rwigner()
-
 optJ12 = generate_qmcpack(
     identifier           = 'optJ12',
     path                 = basepath + 'optJ12',
@@ -119,8 +117,9 @@ optJ12 = generate_qmcpack(
     warmupsteps          = 10,
     init_cycles          = 5,
     cycles               = 5,
+    samples              = 12800,
     blocks               = 10,
-    substeps                = 50,
+    substeps                = 20,
     minwalkers           = 0.3,
     corrections          = [],
     dependencies         = (p2q,'orbitals'),
@@ -143,8 +142,9 @@ optJ123 = generate_qmcpack(
     warmupsteps          = 10,
     init_cycles          = 0,
     cycles               = 10,
+    samples              = 12800,
     blocks               = 10,
-    substeps                = 50,
+    substeps                = 20,
     minwalkers           = 0.5,
     corrections          = [],
     dependencies         = [(p2q,'orbitals'), (optJ12,'jastrow')],
@@ -169,7 +169,7 @@ qmc = generate_qmcpack(
         total_walkers = 1024,
         timestep         = 0.01,
         warmupsteps      = 100,
-        blocks           = 200,
+        blocks           = 100,
         substeps            = 20,
         nonlocalmoves    = 'v3',
         ),
@@ -197,7 +197,7 @@ qmc_excitonic_gap = generate_qmcpack(
         total_walkers     = 1024,
         timestep         = 0.01,
         warmupsteps      = 100,
-        blocks           = 200,
+        blocks           = 100,
         substeps            = 20,
         nonlocalmoves    = 'v3',
         ),
@@ -224,7 +224,7 @@ qmc_QP_minus = generate_qmcpack(
         total_walkers    = 1024,
         timestep         = 0.01,
         warmupsteps      = 100,
-        blocks           = 200,
+        blocks           = 100,
         substeps            = 20,
         nonlocalmoves    = 'v3',
         ),
@@ -256,7 +256,7 @@ qmc_QP_plus = generate_qmcpack(
         total_walkers = 1024,
         timestep         = 0.01,
         warmupsteps      = 1000,
-        blocks           = 200,
+        blocks           = 100,
         substeps            = 20,
         nonlocalmoves    = 'v3',
         ),

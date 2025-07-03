@@ -110,8 +110,6 @@ for scale in scales:
     dependencies      = (nscf,'orbitals'),
     )
 
- J3_rcut = system.structure.rwigner()
-
  optJ12 = generate_qmcpack(
     identifier           = 'optJ12',
     path                 = basepath + 'optJ12',
